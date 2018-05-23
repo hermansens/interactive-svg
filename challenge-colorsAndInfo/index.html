@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div id="text"></div>
+    <div id="map"></div>
+    
+
+    <script>
+        let fillcolor;
+        let newcolor ="#ca1";
+        let areaId;
+        let myJson;
+        let id;
+        // let jSon;
+        // let orgColor;
+        // let id;
+        // let byID;
+
+
+    document.addEventListener("DOMContentLoaded", loadSVG);
+
+    async function loadSVG() {
+      // Hent JSON -------------------------------------------------------------------------
+    
+    let jsonData = await fetch("data.json");
+    myJson = await jsonData.json();
+    
+    // 1. Load svg map
+    //------------------------------------------------------------------------------------	
+ 
+    let svgData = await fetch("map.svg");
+    let mySvg = await svgData.text();
+    
+    document.querySelector("#map").innerHTML = mySvg;
+
+    document.querySelector("svg").addEventListener("mouseover", changeColor);
+
+    document.querySelector("svg").addEventListener("mouseout", orgColor);
+}
+
+function changeColor() {
+    let area = event.target;
+    areaId = area.id;
+    id = area.parentElement.id;
+    fillcolor = area.getAttribute("fill");
+
+    document.querySelector("#"+areaId).setAttribute("fill", newcolor);
+
+    myJson.forEach(element =>{
+        //see if there is a match
+        if(element.city == id){
+                document.querySelector("#text").textContent = element.city;
+        }
+    })
+
+    // id = event.target.getAttribute("id");
+    // orgColor = document.querySelector("#"+id).getAttribute("fill");
+    // document.querySelector("#"+id).setAttribute("fill", "#ca1");
+}
+
+// document.querySelector("#map").addEventListener("mouseout", revertColor);
+
+function orgColor(){
+    document.querySelector("#"+areaId).setAttribute("fill", fillcolor);
+}
+
+// function revertColor() {
+//     document.querySelector("#"+id).setAttribute("fill", orgColor);
+// }
+    
+// document.querySelector("#map").addEventListener("click", by);
+
+// function by(){
+
+// }
+
+    </script>
+</body>
+</html>
